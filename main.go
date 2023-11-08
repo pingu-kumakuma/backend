@@ -13,6 +13,8 @@ import (
 	"time"
 	"unicode/utf8"
 
+	"github.com/joho/godotenv"
+
 	"github.com/oklog/ulid/v2"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -28,6 +30,18 @@ type UserResForHTTPGet struct {
 var db *sql.DB
 
 func init() {
+	err := godotenv.Load(".env")
+
+	// もし err がnilではないなら、"読み込み出来ませんでした"が出力されます。
+	if err != nil {
+		fmt.Printf("読み込み出来ませんでした: %v", err)
+	}
+
+	// .envの SAMPLE_MESSAGEを取得して、messageに代入します。
+	message := os.Getenv("SAMPLE_MESSAGE")
+
+	fmt.Println(message)
+
 	// ①-1
 	mysqlUser := os.Getenv("MYSQL_USER")
 	mysqlUserPwd := os.Getenv("MYSQL_PWD")
