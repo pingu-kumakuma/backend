@@ -1,0 +1,17 @@
+version: "3"
+services:
+  mysql:
+      build:
+        context: .
+        dockerfile: ./docker/mysql/Dockerfile
+      container_name: mysql
+      environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: contentdb
+        MYSQL_PASSWORD: root
+        TZ: 'Asia/Tokyo'
+      volumes:
+      - ./docker/mysql/initdb.d:/docker-entrypoint-initdb.d
+      ports:
+        - 3307:3307
+      command: --port 3307
