@@ -71,15 +71,15 @@ func contentPATCH(c *gin.Context) {
 		log.Fatalln(err)
 	}
 
-	title := c.PostForm("title")
-	category := c.PostForm("Category")
-	curriculum := c.PostForm("Curriculum")
-	item := c.PostForm("Content")
+	decoder := json.NewDecoder(c.Request.Body)
+	var typeofContents model.Contents
+	if err := decoder.Decode(&typeofContents); err != nil {
+		log.Printf("fail: json.Decode, %v\n", err)
+		c.Writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
 	now := time.Now()
-	content.Title = title
-	content.Category = category
-	content.Curriculum = curriculum
-	content.Content = item
 	content.UpdatedAt = now
 	content.UpdateContent()
 	c.JSON(http.StatusOK, gin.H{"content": content})
